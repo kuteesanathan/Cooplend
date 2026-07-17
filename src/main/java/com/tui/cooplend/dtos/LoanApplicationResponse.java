@@ -1,5 +1,6 @@
 package com.tui.cooplend.dtos;
 
+import com.tui.cooplend.enums.AssessmentResult;
 import com.tui.cooplend.enums.LoanApplicationStatus;
 
 import java.math.BigDecimal;
@@ -15,8 +16,10 @@ public record LoanApplicationResponse(
         Integer termMonths,
         String purpose,
         LoanApplicationStatus status,
+        AssessmentResult assessmentResult,
         String reviewReason,
         LocalDateTime submittedDate,
         LocalDateTime reviewedDate,
-        Long reviewerId) {
+        Long reviewerId
+) {
 }

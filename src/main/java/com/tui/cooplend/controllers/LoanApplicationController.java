@@ -1,14 +1,26 @@
 package com.tui.cooplend.controllers;
 
 
+import com.tui.cooplend.dtos.LoanApplicationRequest;
+import com.tui.cooplend.dtos.LoanApplicationResponse;
+import com.tui.cooplend.dtos.LoanApplicationReviewRequest;
 import com.tui.cooplend.entities.LoanApplication;
+import com.tui.cooplend.entities.LoanProduct;
+import com.tui.cooplend.entities.Member;
+import com.tui.cooplend.entities.User;
+import com.tui.cooplend.enums.AssessmentResult;
+import com.tui.cooplend.enums.LoanApplicationStatus;
+import com.tui.cooplend.repositories.LoanApplicationRepository;
+import com.tui.cooplend.repositories.LoanProductRepository;
+import com.tui.cooplend.repositories.MemberRepository;
 import com.tui.cooplend.repositories.UserRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -23,7 +35,7 @@ public class LoanApplicationController {
 
         @GetMapping
         public List<LoanApplicationResponse> getAll(
-                @RequestParam(required = false) Long memberId,
+                @RequestParam(required = false) Member memberId,
                 @RequestParam(required = false) LoanApplicationStatus status) {
             List<LoanApplication> applications;
             if (memberId != null) {
@@ -61,8 +73,8 @@ public class LoanApplicationController {
             }
 
             LoanApplication application = LoanApplication.builder()
-                    .member(member)
-                    .product(product)
+                    .memberId(member)
+                    .productId(product)
                     .amount(request.amount())
                     .termMonths(request.termMonths())
                     .purpose(request.purpose())
@@ -116,5 +128,5 @@ public class LoanApplicationController {
                     application.getReviewer() == null ? null : application.getReviewer().getId()
             );
         }
-    }
 }
+

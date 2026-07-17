@@ -46,4 +46,18 @@ public class LoanProduct {
     @Column(name = "active", nullable = false)
     @Builder.Default
     private boolean active = true;
+
+    public void activate(){
+        this.active = true;
+    }
+    public void deactivate(){
+        this.active = false;
+    }
+
+    public boolean amountWithinLimits(BigDecimal amount){
+        return amount.compareTo(minimumAmount) >= 0 && amount.compareTo(maximumAmount) <= 0;
+    }
+
+    public boolean termWithinLimits(int termMonths){
+        return termMonths >= minimumTermMonths && termMonths <= maximumTermMonths;    }
 }

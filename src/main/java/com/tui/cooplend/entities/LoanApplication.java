@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.net.ssl.SSLSession;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -64,4 +65,12 @@ public class LoanApplication {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewer_id")
     private User reviewer;
+
+    public Member getMember() {
+        return memberId;
+    }
+
+    public LoanProduct getProduct() {
+        return productId;
+    }
 }
