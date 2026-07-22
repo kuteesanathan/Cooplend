@@ -36,11 +36,22 @@ public class Member {
     @Column(nullable = false)
     private String telephone;
 
-    @Column(name = "date_of_birth", nullable = false)
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     @Builder.Default
     private MemberStatus status = MemberStatus.ACTIVE;
+
+    public void suspend(){
+        this.status = MemberStatus.SUSPENDED;
+    }
+
+    public void activate(){
+        this.status = MemberStatus.ACTIVE;
+    }
+
+    public boolean isActive(){
+        return this.status == MemberStatus.ACTIVE;
+    }
 }
