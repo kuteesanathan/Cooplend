@@ -25,6 +25,7 @@ public class LoanProductController {
 
     @GetMapping
     public ResponseEntity<List<LoanProductResponse>>list(){
+
         return ResponseEntity.ok(loanProductService.list());
     }
 
