@@ -1,5 +1,7 @@
 package com.tui.cooplend.services;
 
+import com.tui.cooplend.commonerrors.BusinessRuleViolationException;
+import com.tui.cooplend.commonerrors.ResourceNotFoundException;
 import com.tui.cooplend.dtos.LoanProductRequest;
 import com.tui.cooplend.dtos.LoanProductResponse;
 import com.tui.cooplend.dtos.LoanProductUpdateRequest;
@@ -42,7 +44,7 @@ public class LoanProductService {
     }
 
     public LoanProductResponse getById(Long id){
-        return loanProductMapper.toResponse(findOrThrow(id))
+        return LoanProductMapper.toResponse(findOrThrow(id));
     }
 
     public List<LoanProductResponse> list(){
@@ -83,7 +85,7 @@ public class LoanProductService {
             throw new BusinessRuleViolationException("INVALID_PRODUCT_LIMITS", "minimumAmount must be below maximumAmount");
         }
         if (minimumTermMonths >= maximumTermMonths){
-            throw new BusinessRuleViolationException("INVALID_PRODUCT_LIMITS", "minimumTermMonths must be below maximumTermMonths")
+            throw new BusinessRuleViolationException("INVALID_PRODUCT_LIMITS", "minimumTermMonths must be below maximumTermMonths");
         }
     }
 
