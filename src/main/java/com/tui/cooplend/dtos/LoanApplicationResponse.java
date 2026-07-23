@@ -20,6 +20,7 @@ public record LoanApplicationResponse(
         String reviewReason,
         LocalDateTime submittedDate,
         LocalDateTime reviewedDate,
-        Long reviewerId
+        Long reviewerId,
+        boolean disbursed
 ) {
 }
