@@ -1,132 +1,56 @@
 package com.tui.cooplend.controllers;
 
 
+import com.tui.cooplend.dtos.LoanApplicationRejectRequest;
 import com.tui.cooplend.dtos.LoanApplicationRequest;
 import com.tui.cooplend.dtos.LoanApplicationResponse;
-import com.tui.cooplend.dtos.LoanApplicationReviewRequest;
-import com.tui.cooplend.entities.LoanApplication;
-import com.tui.cooplend.entities.LoanProduct;
-import com.tui.cooplend.entities.Member;
+import com.tui.cooplend.dtos.LoanResponse;
 import com.tui.cooplend.entities.User;
-import com.tui.cooplend.enums.AssessmentResult;
-import com.tui.cooplend.enums.LoanApplicationStatus;
-import com.tui.cooplend.repositories.LoanApplicationRepository;
-import com.tui.cooplend.repositories.LoanProductRepository;
-import com.tui.cooplend.repositories.MemberRepository;
-import com.tui.cooplend.repositories.UserRepository;
+import com.tui.cooplend.services.LoanApplicationService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.dialect.unique.CreateTableUniqueDelegate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/loan-applications")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class LoanApplicationController {
+    private final LoanApplicationService loanApplicationService;
+    private final LoanService loanService;
 
-        private final LoanApplicationRepository loanApplicationRepository;
-        private final MemberRepository memberRepository;
-        private final LoanProductRepository loanProductRepository;
-        private final UserRepository userRepository;
+    @PostMapping
+    public ResponseEntity<LoanApplicationResponse> submit(@Valid @RequestBody LoanApplicationRequest request){
+        return ResponseEntity.status(HttpStatus.CREATED).body(loanApplicationService.submit(request));
+    }
 
-        @GetMapping
-        public List<LoanApplicationResponse> getAll(
-                @RequestParam(required = false) Member memberId,
-                @RequestParam(required = false) LoanApplicationStatus status) {
-            List<LoanApplication> applications;
-            if (memberId != null) {
-                applications = loanApplicationRepository.findByMemberId(memberId);
-            } else if (status != null) {
-                applications = loanApplicationRepository.findByStatus(status);
-            } else {
-                applications = loanApplicationRepository.findAll();
-            }
-            return applications.stream().map(this::toResponse).toList();
-        }
+    @GetMapping
+    public ResponseEntity<Page<LoanApplicationResponse>> list(Pageable pageable){
+        return ResponseEntity.ok(loanApplicationService.list(pageable));
+    }
 
-        @GetMapping("/{id}")
-        public LoanApplicationResponse getById(@PathVariable Long id) {
-            return toResponse(findApplicationOrThrow(id));
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<LoanApplicationResponse> getById(@PathVariable Long id){
+        return ResponseEntity.ok(loanApplicationService.getById(id));
+    }
 
-        @PostMapping
-        @ResponseStatus(HttpStatus.CREATED)
-        public LoanApplicationResponse create(@Valid @RequestBody LoanApplicationRequest request) {
-            Member member = memberRepository.findById(request.memberId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found: " + request.memberId()));
-            LoanProduct product = loanProductRepository.findById(request.productId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Loan product not found: " + request.productId()));
+    @PostMapping("/{id}/approve")
+    public ResponseEntity<LoanApplicationResponse> approve(@PathVariable Long id, @AuthenticationPrincipal User reviewer){
+        return ResponseEntity.ok(loanApplicationService.approve(id, reviewer));
+    }
 
-            if (request.amount().compareTo(product.getMinimumAmount()) < 0
-                    || request.amount().compareTo(product.getMaximumAmount()) > 0) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "Amount must be between " + product.getMinimumAmount() + " and " + product.getMaximumAmount());
-            }
-            if (request.termMonths() < product.getMinimumTermMonths()
-                    || request.termMonths() > product.getMaximumTermMonths()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "Term must be between " + product.getMinimumTermMonths() + " and " + product.getMaximumTermMonths() + " months");
-            }
+    @PostMapping("/{id}/reject")
+    public ResponseEntity<LoanApplicationResponse> reject(@PathVariable Long id, @Valid @RequestBody LoanApplicationRejectRequest request, @AuthenticationPrincipal User reviewer){
+        return ResponseEntity.ok(loanApplicationService.reject(id, reviewer, request.reason()));
+    }
 
-            LoanApplication application = LoanApplication.builder()
-                    .memberId(member)
-                    .productId(product)
-                    .amount(request.amount())
-                    .termMonths(request.termMonths())
-                    .purpose(request.purpose())
-                    .status(LoanApplicationStatus.PENDING)
-                    .assessmentResult(AssessmentResult.NOT_ASSESSED)
-                    .submittedDate(LocalDateTime.now())
-                    .build();
-            return toResponse(loanApplicationRepository.save(application));
-        }
-
-        @PutMapping("/{id}/review")
-        public LoanApplicationResponse review(@PathVariable Long id, @Valid @RequestBody LoanApplicationReviewRequest request) {
-            LoanApplication application = findApplicationOrThrow(id);
-            User reviewer = userRepository.findById(request.reviewerId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reviewer not found: " + request.reviewerId()));
-
-            application.setStatus(request.status());
-            application.setAssessmentResult(request.assessmentResult());
-            application.setReviewReason(request.reviewReason());
-            application.setReviewer(reviewer);
-            application.setReviewedDate(LocalDateTime.now());
-            return toResponse(loanApplicationRepository.save(application));
-        }
-
-        @DeleteMapping("/{id}")
-        @ResponseStatus(HttpStatus.NO_CONTENT)
-        public void delete(@PathVariable Long id) {
-            loanApplicationRepository.delete(findApplicationOrThrow(id));
-        }
-
-        private LoanApplication findApplicationOrThrow(Long id) {
-            return loanApplicationRepository.findById(id)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Loan application not found: " + id));
-        }
-
-        private LoanApplicationResponse toResponse(LoanApplication application) {
-            return new LoanApplicationResponse(
-                    application.getId(),
-                    application.getMember().getId(),
-                    application.getMember().getFullName(),
-                    application.getProduct().getId(),
-                    application.getProduct().getName(),
-                    application.getAmount(),
-                    application.getTermMonths(),
-                    application.getPurpose(),
-                    application.getStatus(),
-                    application.getAssessmentResult(),
-                    application.getReviewReason(),
-                    application.getSubmittedDate(),
-                    application.getReviewedDate(),
-                    application.getReviewer() == null ? null : application.getReviewer().getId()
-            );
-        }
+    public ResponseEntity<LoanResponse> disburse(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.CREATED).body(loanService.disburse(id))
+    }
 }
-

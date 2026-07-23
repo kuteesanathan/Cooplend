@@ -56,13 +56,13 @@ public class LoanApplicationService {
         }
 
         LoanApplication application = LoanApplication.builder()
-                .member(member)
-                .product(product)
+                .memberId(member)
+                .productId(product)
                 .amount(request.amount())
                 .termMonths(request.termMonths())
                 .purpose(request.purpose())
                 .status(LoanApplicationStatus.PENDING)
-                .submittedAt(LocalDateTime.now())
+                .submittedDate(LocalDateTime.now())
                 .disbursed(false)
                 .build();
         loanApplicationRepository.save(application);
