@@ -8,6 +8,7 @@ import com.tui.cooplend.entities.LoanApplication;
 import com.tui.cooplend.entities.LoanProduct;
 import com.tui.cooplend.entities.Member;
 import com.tui.cooplend.entities.User;
+import com.tui.cooplend.enums.AssessmentResult;
 import com.tui.cooplend.enums.LoanApplicationStatus;
 import com.tui.cooplend.enums.LoanStatus;
 import com.tui.cooplend.mappers.LoanApplicationMapper;
@@ -15,6 +16,8 @@ import com.tui.cooplend.repositories.LoanApplicationRepository;
 import com.tui.cooplend.repositories.LoanProductRepository;
 import com.tui.cooplend.repositories.LoanRepository;
 import com.tui.cooplend.repositories.MemberRepository;
+import com.tui.cooplend.rules.AssessmentOutcome;
+import com.tui.cooplend.rules.EligibilityAssessmentService;
 import com.tui.cooplend.rules.EligibilityContext;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -65,13 +68,13 @@ public class LoanApplicationService {
         loanApplicationRepository.save(application);
 
         boolean hasActiveUnpaidLoan = !loanRepository
-                .findByApplicationMemberIdAndStatus(member.getId(), LoanStatus.ACTIVE).isEmpty();
+                .findByApplicationMemberIdAndStatus(LoanStatus.ACTIVE, member.getId()).isEmpty();
         EligibilityContext context = EligibilityContext.from(
                 member, product, request.amount(), request.termMonths(),
                 false, hasActiveUnpaidLoan
         );
         AssessmentOutcome outcome = eligibilityAssessmentService.assess(context);
-        application.setAssessmentResult((outcome.eligible() ? "ELIGIBLE: " : "NOT ELIGIBLE: ") + outcome.summarise());
+        application.setAssessmentResult(AssessmentResult.valueOf((outcome.eligible() ? "ELIGIBLE: " : "NOT ELIGIBLE: ") + outcome.summarise()));
 
         auditEntryService.record("APPLICATION_SUBMITTED", "LoanApplication", application.getId(),
                 "Submitted by member " + member.getMemberNumber() + " for product " + product.getCode());

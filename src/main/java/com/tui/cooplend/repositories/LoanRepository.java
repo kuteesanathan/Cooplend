@@ -2,6 +2,7 @@ package com.tui.cooplend.repositories;
 
 import com.tui.cooplend.entities.Loan;
 import com.tui.cooplend.entities.LoanApplication;
+import com.tui.cooplend.entities.Member;
 import com.tui.cooplend.enums.LoanStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,5 +16,13 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     List<Loan> findByStatus(LoanStatus status);
 
+    List<Loan> findByApplicatioMemberIdAndStatus(Member memberId, LoanStatus status);
+
+//    @Query("""
+//select count(1), sum(case when 1.status = com.tui.cooplend.enums.LoanStatus.ACTIVE then 1 else 0 end),
+//""")
+
     boolean existsByAccountNumber(String accountNumber);
+
+    CharSequence findByApplicationMemberIdAndStatus(LoanStatus status, Long id);
 }
