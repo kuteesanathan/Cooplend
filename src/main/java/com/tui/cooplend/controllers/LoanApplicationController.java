@@ -7,6 +7,7 @@ import com.tui.cooplend.dtos.LoanApplicationResponse;
 import com.tui.cooplend.dtos.LoanResponse;
 import com.tui.cooplend.entities.User;
 import com.tui.cooplend.services.LoanApplicationService;
+import com.tui.cooplend.services.LoanService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,6 @@ public class LoanApplicationController {
     }
 
     public ResponseEntity<LoanResponse> disburse(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.CREATED).body(loanService.disburse(id))
+        return ResponseEntity.status(HttpStatus.CREATED).body(loanService.disburse(id));
     }
 }

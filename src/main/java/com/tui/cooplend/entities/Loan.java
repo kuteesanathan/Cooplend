@@ -29,14 +29,14 @@ public class Loan {
     @Column(name = "account_number")
     private String accountNumber;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
     private LoanApplication applicationId;
 
     @Column(name = "principal")
     private BigDecimal principal;
 
-    @Column(nullable = false, precision = 15, scale = 2)
+    @Column(name = "interest")
     private BigDecimal interest;
 
     @Column(name = "total_due")
