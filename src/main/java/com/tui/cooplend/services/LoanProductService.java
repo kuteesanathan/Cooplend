@@ -70,7 +70,7 @@ public class LoanProductService {
         return LoanProductMapper.toResponse(product);
     }
     @Transactional
-    public LoanProductResponse deactivate(){
+    public LoanProductResponse deactivate(Long id){
         LoanProduct product = findOrThrow(id);
         product.deactivate();
         return LoanProductMapper.toResponse(product);

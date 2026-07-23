@@ -46,6 +46,6 @@ public class LoanProductController {
 
     @PostMapping("/{id}/deactivate")
     public ResponseEntity<LoanProductResponse> deactivate(@PathVariable Long id){
-        return ResponseEntity.ok(loanProductService.deactivate());
+        return ResponseEntity.ok(loanProductService.deactivate(id));
     }
 }
