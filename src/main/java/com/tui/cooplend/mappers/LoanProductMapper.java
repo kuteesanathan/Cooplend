@@ -6,5 +6,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface LoanProductMapper {
-    LoanProductResponse toResponse(LoanProduct product);
+    static LoanProductResponse toResponse(LoanProduct product);
 }
