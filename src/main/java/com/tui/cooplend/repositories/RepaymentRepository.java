@@ -2,6 +2,8 @@ package com.tui.cooplend.repositories;
 
 import com.tui.cooplend.entities.Loan;
 import com.tui.cooplend.entities.Repayment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -14,5 +16,6 @@ public interface RepaymentRepository extends JpaRepository<Repayment, Long> {
     Optional<Repayment> findByTransactionReference(String transactionReference);
 
     boolean existsByTransactionReference(String transactionReference);
-    
+
+    Page<Repayment> findByLoanId(Loan LoanId, Pageable pageable);
 }

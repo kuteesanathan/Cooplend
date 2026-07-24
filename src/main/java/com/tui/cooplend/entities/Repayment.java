@@ -25,24 +25,24 @@ public class Repayment {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "loan_id", nullable = false)
+    @JoinColumn(name = "loan_id")
     private Loan loanId;
 
-    @Column(nullable = false, precision = 15, scale = 2)
+    @Column(name = "amount")
     private BigDecimal amount;
 
-    @Column(name = "transaction_reference", nullable = false, unique = true)
+    @Column(name = "transaction_reference")
     private String transactionReference;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "source")
     private PaymentSource source;
 
-    @Column(nullable = false)
-    private LocalDateTime date;
+    @Column(name = "date")
+    private LocalDateTime repaidAt;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "recorded_by", nullable = false)
+    @JoinColumn(name = "recorded_by")
     private User recordedBy;
 }
 

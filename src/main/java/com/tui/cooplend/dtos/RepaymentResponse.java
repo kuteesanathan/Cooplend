@@ -12,7 +12,8 @@ public record RepaymentResponse(
         BigDecimal amount,
         String transactionReference,
         PaymentSource source,
-        LocalDateTime date,
-        Long recordedById
+        Long recordedById,
+        LocalDateTime repaidAt,
+        BigDecimal outstandingBalanceAfter
 ) {
 }
