@@ -16,7 +16,9 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     List<Loan> findByStatus(LoanStatus status);
 
-    List<Loan> findByApplicatioMemberIdAndStatus(Member memberId, LoanStatus status);
+    List<Loan> findByApplicationMemberIdAndStatus(Member memberId, LoanStatus status);
+
+    Optional<Loan> findWithApplicationById(Long id);
 
 //    @Query("""
 //select count(1), sum(case when 1.status = com.tui.cooplend.enums.LoanStatus.ACTIVE then 1 else 0 end),

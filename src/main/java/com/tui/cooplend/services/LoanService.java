@@ -15,11 +15,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
 @AllArgsConstructor
 public class LoanService {
+    private static final SecureRandom RANDOM = new SecureRandom();
+
     private final LoanRepository loanRepository;
     private final LoanApplicationRepository loanApplicationRepository;
     private final LoanMapper loanMapper;
@@ -45,12 +49,12 @@ public class LoanService {
 
         Loan loan = Loan.builder()
                 .accountNumber(generateUniqueAccountNumber())
-                .application(application)
+                .applicationId(application)
                 .principal(principal)
                 .interest(interest)
                 .totalDue(totalDue)
                 .outstandingBalance(totalDue)
-                .disbursedAt(LocalDateTime.now())
+                .endDate(LocalDate.from(LocalDateTime.now()))
                 .status(LoanStatus.ACTIVE)
                 .build();
         loanRepository.save(loan);
@@ -67,4 +71,24 @@ public class LoanService {
     public LoanResponse getById(Long id) {
         return loanMapper.toResponse(findOrThrow(id));
     }
+
+    Loan findOrThrow(Long id) {
+        return loanRepository.findWithApplicationById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Loan " + id + " not found"));
+    }
+
+    private String generateUniqueAccountNumber() {
+        String candidate;
+        int attempts = 0;
+        do {
+            candidate = "LN-" + String.format("%010d", RANDOM.nextInt(1_000_000_000));
+            attempts++;
+            if (attempts > 20) {
+                throw new BusinessRuleViolationException("ACCOUNT_NUMBER_GENERATION_FAILED",
+                        "Could not generate a unique loan account number, please retry");
+            }
+        } while (loanRepository.existsByAccountNumber(candidate));
+        return candidate;
+    }
+
 }
