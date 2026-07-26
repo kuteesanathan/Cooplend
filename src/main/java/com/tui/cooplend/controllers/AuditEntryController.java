@@ -20,7 +20,7 @@ public class AuditEntryController {
 
     @GetMapping
     public ResponseEntity<Page<AuditEntryResponse>>list(Pageable pageable){
-        Page page = (Page) auditEntryRepository.findAllByOrderByTimestampDesc(pageable).map(e -> new AuditEntryResponse(e.getId(), e.getAction(), e.getEntityType(), e.getEntityId(), e.getActorId().getId(), e.getTimestamp(), e.getDescription()));
+        Page<AuditEntryResponse> page = auditEntryRepository.findAllByOrderByTimestampDesc(pageable).map(e -> new AuditEntryResponse(e.getId(), e.getAction(), e.getEntityType(), e.getEntityId(), e.getActorId().getId(), e.getTimestamp(), e.getDescription()));
         return ResponseEntity.ok(page);
     }
 }

@@ -25,24 +25,24 @@ public class PaymentRequest {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "loan_id", nullable = false)
+    @JoinColumn(name = "loan_id")
     private Loan loan;
 
-    @Column(nullable = false, precision = 15, scale = 2)
+    @Column(name = "amount")
     private BigDecimal amount;
 
-    @Column(name = "internal_reference", nullable = false, unique = true)
+    @Column(name = "internal_reference")
     private String internalReference;
 
     @Column(name = "provider_reference")
     private String providerReference;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status")
     @Builder.Default
     private PaymentRequestStatus status = PaymentRequestStatus.PENDING;
 
-    @Column(name = "created_date", nullable = false)
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
 
     @Column(name = "updated_date")
