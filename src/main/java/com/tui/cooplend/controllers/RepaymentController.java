@@ -4,6 +4,7 @@ import com.tui.cooplend.dtos.RepaymentRequest;
 import com.tui.cooplend.dtos.RepaymentResponse;
 import com.tui.cooplend.entities.Loan;
 import com.tui.cooplend.entities.User;
+import com.tui.cooplend.enums.PaymentSource;
 import com.tui.cooplend.services.RepaymentService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class RepaymentController {
                                                     @Valid @RequestBody RepaymentRequest request,
                                                     @AuthenticationPrincipal User user) {
         RepaymentResponse response = repaymentService.record(
-                loanId, request.amount(), request.transactionReference(), "MANUAL", user.getEmail());
+                loanId, request.amount(), request.transactionReference(), (PaymentSource) "MANUAL", user.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

@@ -11,5 +11,7 @@ public interface PaymentRequestRepository extends JpaRepository<PaymentRequest, 
 
     Optional<PaymentRequest> findByInternalReference(String internalReference);
 
+    Optional<PaymentRequest> findByProviderReference(String providerReference);
+
     boolean existsByInternalReference(String internalReference);
 }

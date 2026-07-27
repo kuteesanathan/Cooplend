@@ -47,4 +47,18 @@ public class PaymentRequest {
 
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
+
+    public boolean isAlreadyFinal(){
+        return status == PaymentRequestStatus.SUCCESS || status == PaymentRequestStatus.FAILED;
+    }
+
+    public void markSuccessful(){
+        this.status = PaymentRequestStatus.SUCCESS;
+        this.updatedDate = LocalDateTime.now();
+    }
+
+    public void markFailed(){
+        this.status = PaymentRequestStatus.FAILED;
+        this.updatedDate = LocalDateTime.now();
+    }
 }
