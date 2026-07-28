@@ -132,4 +132,12 @@ CREATE TABLE audit_entries(
     CONSTRAINT fk_audit_entries_actor FOREIGN KEY (actor_id) REFERENCES users(id)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4;
 
+ALTER TABLE loan_applications
+ADD COLUMN disbursed VARCHAR(255);
+
+alter table loan_applications
+    modify disbursed bit null;
+
+alter table members
+    add status VARCHAR(20) null;
 

@@ -10,6 +10,9 @@ import com.tui.cooplend.entities.Member;
 import com.tui.cooplend.mappers.MemberMapper;
 import com.tui.cooplend.repositories.MemberRepository;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.SecureRandom;
 
 @Service
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
 public class MemberService {
     private static final SecureRandom RANDOM = new SecureRandom();

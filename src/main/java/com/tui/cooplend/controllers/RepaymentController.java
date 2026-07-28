@@ -23,10 +23,10 @@ public class RepaymentController {
 
     @PostMapping
     public ResponseEntity<RepaymentResponse> record(@PathVariable Long loanId,
-                                                    @Valid @RequestBody RepaymentRequest request,
-                                                    @AuthenticationPrincipal User user) {
+                                                    @Valid @RequestBody RepaymentRequest request
+                                                   ) {
         RepaymentResponse response = repaymentService.record(
-                loanId, request.amount(), request.transactionReference(), (PaymentSource) "MANUAL", user.getEmail());
+                loanId, request.amount(), request.transactionReference(), PaymentSource.CASH);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

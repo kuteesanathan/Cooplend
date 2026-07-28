@@ -21,6 +21,7 @@ repositories {
 
 ext {
     mapstructVersion = '1.6.3'
+    lombokVersion = '1.18.38'
 }
 
 dependencies {
@@ -54,8 +55,8 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
     // Lombok
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok:1.18.38'
+    annotationProcessor 'org.projectlombok:lombok:1.18.38'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
     // Lombok + MapStruct binding so annotation processors run in the right order

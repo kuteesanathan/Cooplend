@@ -10,8 +10,15 @@ import com.tui.cooplend.enums.PaymentSource;
 import com.tui.cooplend.repositories.LoanRepository;
 import com.tui.cooplend.repositories.RepaymentRepository;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +26,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service
+@Getter
+@Setter
 @AllArgsConstructor
 public class RepaymentService {
     private final RepaymentRepository repaymentRepository;
@@ -29,8 +38,10 @@ public class RepaymentService {
     public RepaymentResponse record(Long loanId,
                                     BigDecimal amount,
                                     String transactionReference,
-                                    PaymentSource source,
-                                    User recordedBy) {
+                                    PaymentSource source)
+                                    {
+                                        var recordedBy = SecurityContextHolder.getContext();
+
         if (repaymentRepository.existsByTransactionReference(transactionReference)) {
             throw new DuplicateResourceException("Transaction reference " + transactionReference + " has already been used");
         }
@@ -45,7 +56,7 @@ public class RepaymentService {
                 .transactionReference(transactionReference)
                 .source(source)
                 .repaidAt(LocalDateTime.now())
-                .recordedBy(recordedBy)
+                .recordedBy((User) recordedBy)
                 .build();
         repaymentRepository.save(repayment);
 

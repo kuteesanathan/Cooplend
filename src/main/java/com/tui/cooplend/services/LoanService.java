@@ -11,6 +11,8 @@ import com.tui.cooplend.mappers.LoanMapper;
 import com.tui.cooplend.repositories.LoanApplicationRepository;
 import com.tui.cooplend.repositories.LoanRepository;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
+@Getter
+@Setter
 @AllArgsConstructor
 public class LoanService {
     private static final SecureRandom RANDOM = new SecureRandom();

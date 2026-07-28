@@ -9,6 +9,8 @@ import com.tui.cooplend.entities.LoanProduct;
 import com.tui.cooplend.mappers.LoanProductMapper;
 import com.tui.cooplend.repositories.LoanProductRepository;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
+@Getter
+@Setter
 @AllArgsConstructor
 public class LoanProductService {
 
@@ -40,15 +44,16 @@ public class LoanProductService {
                 .maximumTermMonths(request.maximumTermMonths())
                 .active(false)
                 .build();
-        return LoanProductMapper.toResponse(loanProductRepository.save(product));
+
+        return loanProductMapper.toResponse(loanProductRepository.save(product));
     }
 
     public LoanProductResponse getById(Long id){
-        return LoanProductMapper.toResponse(findOrThrow(id));
+        return loanProductMapper.toResponse(findOrThrow(id));
     }
 
     public List<LoanProductResponse> list(){
-        return loanProductRepository.findAll().stream().map(LoanProductMapper::toResponse).toList();
+        return loanProductRepository.findAll().stream().map(loanProductMapper::toResponse).toList();
     }
     @Transactional
     public  LoanProductResponse update(Long id, LoanProductUpdateRequest request) {
@@ -61,19 +66,19 @@ public class LoanProductService {
         product.setMinimumTermMonths(request.minimumTermMonths());
         product.setMaximumTermMonths(request.maximumTermMonths());
 
-        return LoanProductMapper.toResponse(product);
+        return loanProductMapper.toResponse(product);
     }
     @Transactional
     public LoanProductResponse activate(Long id){
         LoanProduct product = findOrThrow(id);
         product.activate();
-        return LoanProductMapper.toResponse(product);
+        return loanProductMapper.toResponse(product);
     }
     @Transactional
     public LoanProductResponse deactivate(Long id){
         LoanProduct product = findOrThrow(id);
         product.deactivate();
-        return LoanProductMapper.toResponse(product);
+        return loanProductMapper.toResponse(product);
     }
 
     LoanProduct findOrThrow(Long id){

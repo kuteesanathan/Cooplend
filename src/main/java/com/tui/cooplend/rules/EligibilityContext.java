@@ -2,6 +2,8 @@ package com.tui.cooplend.rules;
 
 import com.tui.cooplend.entities.LoanProduct;
 import com.tui.cooplend.entities.Member;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 

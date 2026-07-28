@@ -4,10 +4,14 @@ import com.tui.cooplend.entities.AuditEntry;
 import com.tui.cooplend.entities.User;
 import com.tui.cooplend.repositories.AuditEntryRepository;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Getter
+@Setter
 @AllArgsConstructor
 public class AuditEntryService {
     private final AuditEntryRepository auditEntryRepository;

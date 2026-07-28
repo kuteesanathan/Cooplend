@@ -24,13 +24,13 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "member_number", nullable = false, unique = true)
+    @Column(name = "member_number")
     private String memberNumber;
 
-    @Column(name = "full_name", nullable = false)
+    @Column(name = "full_name")
     private String fullName;
 
-    @Column(name = "national_id", nullable = false, unique = true)
+    @Column(name = "national_id")
     private String nationalId;
 
     @Column(nullable = false)

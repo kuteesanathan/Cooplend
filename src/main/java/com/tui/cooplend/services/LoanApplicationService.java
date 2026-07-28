@@ -20,6 +20,8 @@ import com.tui.cooplend.rules.AssessmentOutcome;
 import com.tui.cooplend.rules.EligibilityAssessmentService;
 import com.tui.cooplend.rules.EligibilityContext;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,8 @@ import java.time.LocalDateTime;
 
 @Service
 @AllArgsConstructor
+@Getter
+@Setter
 public class LoanApplicationService {
     private final LoanApplicationRepository loanApplicationRepository;
     private final MemberRepository memberRepository;

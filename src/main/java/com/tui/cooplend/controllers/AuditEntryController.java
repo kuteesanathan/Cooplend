@@ -3,6 +3,8 @@ package com.tui.cooplend.controllers;
 import com.tui.cooplend.dtos.AuditEntryResponse;
 import com.tui.cooplend.repositories.AuditEntryRepository;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.query.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +17,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/audit-entries")
 @AllArgsConstructor
+@Getter
+@Setter
 public class AuditEntryController {
     private final AuditEntryRepository auditEntryRepository;
 
     @GetMapping
-    public ResponseEntity<Page<AuditEntryResponse>>list(Pageable pageable){
-        Page<AuditEntryResponse> page = auditEntryRepository.findAllByOrderByTimestampDesc(pageable).map(e -> new AuditEntryResponse(e.getId(), e.getAction(), e.getEntityType(), e.getEntityId(), e.getActorId().getId(), e.getTimestamp(), e.getDescription()));
+    public ResponseEntity<?>list(Pageable pageable){
+        Page page = (Page) auditEntryRepository.findAllByOrderByTimestampDesc(pageable).map(e -> new AuditEntryResponse(e.getId(), e.getAction(), e.getEntityType(), e.getEntityId(), e.getActorId().getId(), e.getTimestamp(), e.getDescription()));
         return ResponseEntity.ok(page);
     }
 }
