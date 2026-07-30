@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: cooplend
+  datasource:
+    url: jdbc:mysql://localhost:3306/cooplend
+    username: root
+    password: natiSosha@15
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+    ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+      dialect: org.hibernate.dialect.MySQLDialect
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+cooplend:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:this-is-a-temporary-dev-secret-key-at-least-32-bytes-long}
+      expiration-minutes: 60
