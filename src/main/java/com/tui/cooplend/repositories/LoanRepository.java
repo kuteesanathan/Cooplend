@@ -16,7 +16,7 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     List<Loan> findByStatus(LoanStatus status);
 
-    List<Loan> findByApplicationMemberIdAndStatus(Member memberId, LoanStatus status);
+    List<Loan> findByApplicationIdMemberIdAndStatus(Long memberId, LoanStatus status);
 
     Optional<Loan> findWithApplicationById(Long id);
 
@@ -26,5 +26,5 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
     boolean existsByApplicationId(Long applicationId);
     boolean existsByAccountNumber(String accountNumber);
 
-    CharSequence findByApplicationMemberIdAndStatus(LoanStatus status, Long id);
+    CharSequence findByApplicationIdMemberIdAndStatus(LoanStatus status, Long id);
 }

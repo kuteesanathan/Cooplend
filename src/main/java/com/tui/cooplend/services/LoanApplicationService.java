@@ -72,7 +72,7 @@ public class LoanApplicationService {
         loanApplicationRepository.save(application);
 
         boolean hasActiveUnpaidLoan = !loanRepository
-                .findByApplicationMemberIdAndStatus(LoanStatus.ACTIVE, member.getId()).isEmpty();
+                .findByApplicationIdMemberIdAndStatus(member.getId(), LoanStatus.ACTIVE).isEmpty();
         EligibilityContext context = EligibilityContext.from(
                 member, product, request.amount(), request.termMonths(),
                 false, hasActiveUnpaidLoan
