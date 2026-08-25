@@ -12,4 +12,5 @@ public interface LoanMapper {
     @Mapping(target = "productName", source = "applicationId.product.id")
     @Mapping(target = "memberName", source = "applicationId.member.fullName")
     LoanResponse toResponse(Loan loan);
+
 }
