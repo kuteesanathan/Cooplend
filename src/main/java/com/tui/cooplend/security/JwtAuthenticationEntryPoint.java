@@ -20,6 +20,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private final ObjectMapper objectMapper;
     public JwtAuthenticationEntryPoint(ObjectMapper objectMapper){
         this.objectMapper = objectMapper;
+
     }
 
     @Override
@@ -28,5 +29,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         ErrorResponse body = new ErrorResponse(LocalDateTime.now(), 401, "UNAUTHENTICATED", "A valid Bearer is required to access this resource", request.getRequestURI(), null);
         response.getWriter().write(objectMapper.writeValueAsString(body));
+
     }
 }
