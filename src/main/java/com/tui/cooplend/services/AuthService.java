@@ -33,5 +33,6 @@ public class AuthService {
 
     public UserResponse userResponse(User user){
         return new UserResponse(user.getId(), user.getFullName(), user.getEmail(), user.getRole());
+
     }
 }

@@ -114,5 +114,6 @@ public class LoanApplicationService {
     LoanApplication findOrThrow(Long id) {
         return loanApplicationRepository.findWithDetailsById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Loan application " + id + " not found"));
+
     }
 }

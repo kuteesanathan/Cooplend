@@ -55,6 +55,7 @@ public class LoanProductService {
     public List<LoanProductResponse> list(){
         return loanProductRepository.findAll().stream().map(loanProductMapper::toResponse).toList();
     }
+
     @Transactional
     public  LoanProductResponse update(Long id, LoanProductUpdateRequest request) {
         validateLimits(request.minimumAmount(), request.maximumAmount(), request.minimumTermMonths(), request.maximumTermMonths());

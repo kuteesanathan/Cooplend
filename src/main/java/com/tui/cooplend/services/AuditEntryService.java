@@ -27,11 +27,13 @@ public class AuditEntryService {
                 .description(description)
                 .build());
     }
+
     private String currentActor(){
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getName() == null){
             return "system";
         }
         return authentication.getName();
+
     }
 }
