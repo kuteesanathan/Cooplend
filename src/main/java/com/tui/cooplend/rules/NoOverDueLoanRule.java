@@ -12,5 +12,6 @@ public class NoOverDueLoanRule implements BusinessRule<EligibilityContext> {
             return RuleResult.fail(NAME, "Member has an active loan with an outstanding balance");
         }
         return RuleResult.pass(NAME);
+
     }
 }

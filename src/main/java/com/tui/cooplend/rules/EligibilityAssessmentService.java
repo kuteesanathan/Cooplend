@@ -39,6 +39,7 @@ public class EligibilityAssessmentService {
         boolean eligible = results.stream().allMatch(RuleResult::passed);
 
         return new AssessmentOutcome(eligible, results);
+
     }
 
     private CompletableFuture<RuleResult> runWithTimeout(BusinessRule<EligibilityContext> rule, EligibilityContext context){

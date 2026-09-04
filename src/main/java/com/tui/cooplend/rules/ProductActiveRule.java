@@ -12,5 +12,6 @@ public class ProductActiveRule implements BusinessRule<EligibilityContext>{
             return RuleResult.fail(NAME, "Loan product is not active");
         }
         return RuleResult.pass(NAME);
+
     }
 }
