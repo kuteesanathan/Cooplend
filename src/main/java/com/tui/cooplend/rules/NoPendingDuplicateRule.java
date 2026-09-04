@@ -12,5 +12,6 @@ public class NoPendingDuplicateRule implements BusinessRule<EligibilityContext> 
             return RuleResult.fail(NAME, "Member already has a pending application for this product");
         }
         return RuleResult.pass(NAME);
+
     }
 }

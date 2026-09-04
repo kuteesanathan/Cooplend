@@ -20,7 +20,6 @@ public class EligibilityAssessmentService {
     private final TaskExecutor executor;
     private final long timeoutSeconds;
 
-
     public EligibilityAssessmentService(List<BusinessRule<EligibilityContext>> rules,
                                         @Qualifier("eligibilityExecutor") TaskExecutor executor,
                                         @Value("${cooplend.eligibility.rule.timeout-seconds:3}") long timeoutSeconds
